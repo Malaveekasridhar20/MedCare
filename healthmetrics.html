@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+/* Header */
+header {
+    background-color: #2f4f4f;
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 60px; /* Fixed height for consistency */
+    z-index: 1000; /* Keep header above other elements */
+}
+
+/* Logo positioned at the left */
+.header .logo {
+    position: absolute;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Space between icon and text */
+.header .logo i {
+    margin-right: 10px;
+}
+
+/* Centered Title */
+header h1 {
+    margin: 0;
+    font-size: 50px;
+    margin-left: 300px;
+}
+
+/* Sidebar Styles */
+#sidebar {
+    width: 250px;
+    background-color: #2f4f4f;
+    padding-top: 20px;
+    color: white;
+    position: fixed;
+    top: 80px; /* Adjusted for header height */
+    left: 0;
+    height: calc(100vh - 80px); /* Full height minus header height */
+    overflow-y: auto; /* Enables vertical scrolling */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box; /* Prevents width overflow */
+    transition: width 0.3s ease; /* Smooth transition for sidebar width */
+    z-index: 999; /* Keeps sidebar above other content */
+}
+
+/* Smooth scrolling effect */
+#sidebar {
+    scroll-behavior: smooth; /* Enables smooth scrolling inside sidebar */
+
+}
+
+/* Sidebar links */
+#sidebar a {
+    padding: 12px 15px;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    border-bottom: 1px solid #fff;
+    display: block;
+}
+
+/* Sidebar hover effect */
+#sidebar a:hover {
+    background-color: #4caf50;
+}
+#sidebar a:last-child {
+    margin-bottom: 100px; /* Adjust the value to your preference */
+}
+
+/* Main content area */
+#main-content {
+    margin-left: 250px; /* Space for sidebar */
+    padding: 20px;
+    margin-top: 80px; /* Space for header */
+    transition: margin-left 0.3s ease; /* Smooth transition for content */
+}
+
+
+/* Push main content to the right of sidebar */
+#main-content {
+    margin-left: 250px; /* To avoid sidebar overlap */
+    padding: 20px;
+}
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            overflow-y: auto;
+            height: calc(100vh - 60px); /* Full height minus header */
+            overflow-y: scroll;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .active-section {
+            display: block;
+        }
+
+        h3 {
+            font-size:35px;
+            color: #333;
+            text-align: center;
+        }
+
+        .chart-container {
+            margin-bottom: 30px;
+        }
+
+        .chart {
+            width: 500px;
+            height: 500px;
+        }
+
+        .info-table {
+        width: 100%;
+        max-width: 800px;
+        margin: 15px auto;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-table th, .info-table td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+        font-size: 18px;
+    }
+
+    .info-table th {
+        background-color: #f2f2f2;
+        color: black;
+    }
+
+    .normal {
+        color: green;
+        font-weight: bold;
+    }
+
+    .abnormal {
+        color: red;
+        font-weight: bold;
+    }
+
+    .section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .section h3 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: black;
+    }
+
+    .section h3 span {
+        margin-right: 10px;
+    }
+    .info-table .header-row th {
+    font-size: 25px; /* Adjust as needed */
+}
+.warning {
+    color: orange;
+    font-weight: bold;
+}
+
+.abnormal {
+    color: red;
+    font-weight: bold;
+}
+
+
+
+
+
+        .patient-photo {
+            width: 150px; /* Adjust based on your design */
+            height: 150px;
+            border-radius:50%; /* Circular image */
+            object-fit: cover; /* Ensures the image fills the space without distortion */
+            display: block;
+            margin: 10px auto; /* Centers the image */
+            border:0; /* Optional: Adds a blue border for emphasis */
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* Adds a slight shadow for depth */
+            margin-top:10px;
+            align-items: center;
+        }
+        /* Chatbot styles */
+.chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #1f3a64;
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.chatbot {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.chatbot-header {
+    background-color: #1f3a64;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0;
+}
+
+.chatbot-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-box {
+    height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.send-btn {
+    padding: 10px 15px;
+    background-color: #1f3a64;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.send-btn:hover {
+    background-color: #2d4f72;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #ddd;
+}
+.last-updated {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+    margin-left: 580px;
+}
+
+.last-updated span {
+    font-weight: bold;
+}
+/* Home button */
+.home-btn {
+    position: absolute;
+    bottom: 10px; /* Adjust the distance from the bottom */
+    right: 20px; /* Adjust the distance from the right */
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none; /* Remove underline */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Home button hover effect */
+.home-btn:hover {
+    background-color: #45a049;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> MedCare
+        </div>
+        <h1>Health Metrics</h1>
+        <a href="index.html" class="home-btn">Home</a>
+    </header>
+
+    <div id="sidebar">
+        <img src="img\WhatsApp Image 2024-01-17 at 20.44.39_74c1fe0c.jpg" alt="Patient Photo" class="patient-photo">
+        <a href="#" onclick="showSection('personal')">Personal Information</a>
+        <a href="#" onclick="showSection('vital')">Vital Signs</a>
+        <a href="#" onclick="showSection('composition')">Body Composition</a>
+        <a href="#" onclick="showSection('bloodTest')">Blood Tests</a>
+        <a href="#" onclick="showSection('urineTest')">Urine Tests</a>
+        <a href="#" onclick="showSection('cardiac')">Cardiac Health</a>
+        <a href="#" onclick="showSection('respiratory')">Respiratory Health</a>
+        <a href="#" onclick="showSection('bone')">Bone and Joint Health</a>
+        <a href="#" onclick="showSection('neurological')">Neurological Health</a>
+        <a href="#" onclick="showSection('eye')">Eye and Vision Tests</a>
+        <a href="#" onclick="showSection('dental')">Dental Health</a>
+        <a href="#" onclick="showSection('skin')">Skin Health</a>
+        <a href="#" onclick="showSection('hormonal')">Hormonal Health</a>
+        <a href="#" onclick="showSection('mental')">Mental Health</a>
+    </div>
+
+    <div class="main-content">
+
+        <!-- Personal Information -->
+        <div id="personal" class="section active-section">
+            <h3>Personal Information</h3>
+            <table class="info-table">
+                <tr><th>Name</th><td>Malaveeka Sridhar</td></tr>
+                <tr><th>Age</th><td>20</td></tr>
+                <tr><th>Gender</th><td>Female</td></tr>
+                <tr><th>Medical History</th><td>Hypertension</td></tr>
+                <tr><th>Surgical History</th><td>Appendectomy</td></tr>
+                <tr><th>Allergies</th><td>Penicillin</td></tr>
+                <tr><th>Current Medications</th><td>None</td></tr>
+                <tr><th>Family History</th><td>Father: Diabetes,<br>Mother: Hypertension</td></tr>
+            </table>
+        </div>
+
+<!-- Vital Signs -->
+<div id="vital" class="section">
+    <h3 >Vital Signs</h3>
+    <table class="info-table"> 
+        <tr class="header-row">
+            <th>Measurement</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Heart Rate</td>
+            <td>72 bpm</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Blood Pressure</td>
+            <td>120/80 mmHg</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Body Temperature</td>
+            <td>98.6°F</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Respiratory Rate</td>
+            <td>16 bpm</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Oxygen Saturation</td>
+            <td>98%</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Blood Sugar (Fasting)</td>
+            <td>110 mg/dL</td>
+            <td class="abnormal">❌ Slightly High</td>
+        </tr>
+        <tr>
+            <td>Cholesterol Level</td>
+            <td>220 mg/dL</td>
+            <td class="abnormal">❌ High</td>
+        </tr>
+    </table>
+    <p class="last-updated" style=" margin-bottom: 50px;">Last updated: <span id="vitalLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>Blood Sugar (Fasting) - Slightly High</td>
+                <td>Leafy greens, whole grains, nuts, and cinnamon</td>
+            </tr>
+            <tr>
+                <td>Cholesterol Level - High</td>
+                <td>Oats, fatty fish, nuts, and olive oil</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>Blood Sugar (Fasting) - Slightly High</td>
+                <td>Metformin, Glipizide</td>
+            </tr>
+            <tr>
+                <td>Cholesterol Level - High</td>
+                <td>Statins (Atorvastatin, Simvastatin)</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Body Composition Metrics -->
+<div id="composition" class="section">
+    <h3><span>🏋️‍♂️</span> Body Composition Metrics</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Measurement</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>BMI</td>
+            <td>23.5</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Body Fat</td>
+            <td>18%</td>
+            <td class="normal">✅ Healthy Range</td>
+        </tr>
+        <tr>
+            <td>Muscle Mass</td>
+            <td>60 kg</td>
+            <td class="normal">✅ Good</td>
+        </tr>
+        <tr>
+            <td>Visceral Fat</td>
+            <td>12%</td>
+            <td class="abnormal">❌ Slightly High</td>
+        </tr>
+        <tr>
+            <td>Bone Mass</td>
+            <td>3.2 kg</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+    </table>
+    <p class="last-updated" style=" margin-bottom: 50px;">Last updated: <span id="vitalLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>Visceral Fat - Slightly High</td>
+                <td>Avocados, green tea, nuts, and fiber-rich foods</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>Visceral Fat - Slightly High</td>
+                <td>Omega-3 supplements, Orlistat (if prescribed)</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Blood Tests -->
+<div id="bloodTest" class="section">
+    <h3><span>🩸</span> Blood Tests</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Test</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Total Cholesterol</td>
+            <td>180 mg/dL</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Blood Glucose</td>
+            <td>90 mg/dL</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Liver Function (ALT)</td>
+            <td>30 U/L</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Kidney Function (Creatinine)</td>
+            <td>0.8 mg/dL</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+    </table>
+    
+    <p class="last-updated" style="margin-bottom: 100px;">Last updated: <span id="bloodTestLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+
+     <!-- Urine Tests -->
+<div id="urineTest" class="section">
+    <h3><span>💧</span> Urine Tests</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Test</th>
+            <th>Result</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Urine Analysis</td>
+            <td>Normal</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Microalbumin</td>
+            <td>Negative</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+    </table>
+    <p class="last-updated" style="margin-bottom: 100px;">Last updated: <span id="urineTestLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Cardiac Health -->
+<div id="cardiac" class="section">
+    <h3><span>❤️</span> Cardiac Health</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Test</th>
+            <th>Result</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>ECG</td>
+            <td>Normal</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Stress Test</td>
+            <td>Passed</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+    </table>
+    <p class="last-updated" style="margin-bottom: 100px;">Last updated: <span id="cardiacLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<!-- Respiratory Health -->
+<div id="respiratory" class="section">
+    <h3><span>🫁</span> Respiratory Health</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Test</th>
+            <th>Result</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Chest X-ray</td>
+            <td>Clear lungs</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Pulmonary Function Test</td>
+            <td>Normal</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+    </table>
+    <p class="last-updated" style="margin-bottom: 100px;">Last updated: <span id="respiratoryLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Bone and Joint Health -->
+<div id="bone" class="section">
+    <h3><span>🦴</span> Bone and Joint Health</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Test</th>
+            <th>Result</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Bone Mineral Density Test</td>
+            <td>Normal</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>X-ray</td>
+            <td>Clear</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+    </table>
+    <p class="last-updated" style="margin-bottom: 100px;">Last updated: <span id="boneLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Neurological Health -->
+<div id="neurological" class="section">
+    <h3>🧠 Neurological Health</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Measurement</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Cognitive Function</td>
+            <td>Normal</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+        <tr>
+            <td>Nerve Conduction Studies</td>
+            <td>Normal</td>
+            <td class="normal">✅ Normal</td>
+        </tr>
+    </table>
+    <p class="last-updated" style="margin-bottom: 100px;">Last updated: <span id="neurologicalLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Eye Health -->
+<div id="eye" class="section">
+    <h3>👁️ Eye and Vision Tests</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Measurement</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr><td>Visual Acuity</td><td>20/20</td><td class="normal">✅ Normal</td></tr>
+        <tr><td>Eye Pressure</td><td>Normal</td><td class="normal">✅ Normal</td></tr>
+        <tr><td>Color Vision</td><td>Normal</td><td class="normal">✅ Normal</td></tr>
+        <tr><td>Refraction</td><td>No Issues</td><td class="normal">✅ No Correction Needed</td></tr>
+        <tr><td>Glaucoma Screening</td><td>Clear</td><td class="normal">✅ No Signs</td></tr>
+        <tr><td>Retinal Health</td><td>Normal</td><td class="normal">✅ Healthy</td></tr>
+        <tr><td>Cataract Check</td><td>Not Present</td><td class="normal">✅ No Cataracts</td></tr>
+        <tr><td>Macular Degeneration</td><td>Not Detected</td><td class="normal">✅ No Issues</td></tr>
+        <tr><td>Conjunctiva Health</td><td>Healthy</td><td class="normal">✅ Healthy</td></tr>
+        <tr><td>Eye Strain</td><td>Minimal</td><td class="warning">⚠️ Mild Strain</td></tr>
+        <tr><td>Dry Eye Test</td><td>Normal</td><td class="normal">✅ No Dry Eye</td></tr>
+        <tr><td>Vision Correction</td><td>Glasses Recommended</td><td class="abnormal">❌ Requires Glasses</td></tr>
+    </table>
+    <p class="last-updated" style="margin-bottom: 100px;">Last updated: <span id="eyeLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>Healthy Eyes</td>
+                <td>Carrots, spinach, eggs, sweet potatoes</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>Healthy Eyes</td>
+                <td>Vitamin A, C supplements</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Dental Health -->
+<div id="dental" class="section">
+    <h3><span>🦷</span> Dental Health</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Measurement</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr><td>Dental Checkup</td><td>Normal</td><td class="normal">✅ Normal</td></tr>
+        <tr><td>Teeth Cleaning</td><td>Completed</td><td class="normal">✅ Done</td></tr>
+        <tr><td>Gum Health</td><td>Healthy</td><td class="normal">✅ Healthy</td></tr>
+        <tr><td>Cavity Check</td><td>None</td><td class="normal">✅ No Cavities</td></tr>
+        <tr><td>Fluoride Treatment</td><td>Recommended</td><td class="warning">⚠️ Consider Treatment</td></tr>
+        <tr><td>Orthodontic Consultation</td><td>Not Needed</td><td class="normal">✅ Not Required</td></tr>
+        <tr><td>Wisdom Teeth</td><td>None Present</td><td class="normal">✅ No Issues</td></tr>
+        <tr><td>Braces</td><td>Not Applicable</td><td class="normal">✅ No Braces</td></tr>
+        <tr><td>Root Canal</td><td>Not Required</td><td class="normal">✅ No Issues</td></tr>
+        <tr><td>Tooth Sensitivity</td><td>None</td><td class="normal">✅ No Sensitivity</td></tr>
+        <tr><td>Cosmetic Dentistry</td><td>Consider Whitening</td><td class="warning">⚠️ Optional</td></tr>
+    </table>
+    <p class="last-updated">Last updated: <span id="dentalLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>Healthy Teeth</td>
+                <td>Apples</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>Healthy Teeth</td>
+                <td>Antibiotics</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Skin Health -->
+<div id="skin" class="section">
+    <h3><span>🩺</span> Skin Health</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Measurement</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Skin Condition</td>
+            <td>Clear</td>
+            <td class="normal">✅ Healthy</td>
+        </tr>
+    </table>
+    <p class="last-updated">Last updated: <span id="skinLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Hormonal Health -->
+<div id="hormonal" class="section">
+    <h3><span>🧬</span> Hormonal Health</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Measurement</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr><td>Thyroid Function</td><td>Normal</td><td class="normal">✅ Normal</td></tr>
+        <tr><td>Sex Hormones</td><td>Normal</td><td class="normal">✅ Normal</td></tr>
+    </table>
+    <p class="last-updated">Last updated: <span id="hormonalLastUpdated">January 31, 2025</span></p>
+
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+
+<!-- Mental Health -->
+<div id="mental" class="section">
+    <h3>🧘 Mental Health</h3>
+    <table class="info-table">
+        <tr class="header-row">
+            <th>Measurement</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Mental Well-being</td>
+            <td>Good</td>
+            <td class="normal">✅ Stable</td>
+        </tr>
+    </table>
+    <p class="last-updated" style=" margin-bottom: 100px;">Last updated: <span id="vitalLastUpdated">January 31, 2025</span></p>
+    
+    <!-- Additional Tables -->
+    <div class="recommendations" style="display: flex; justify-content: space-between;">
+        <!-- Food Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Foods</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <!-- Medicine Recommendations -->
+        <table class="info-table" style="width: 40%;">
+            <tr class="header-row">
+                <th>Condition</th>
+                <th>Recommended Medicines</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- Chatbot Popup -->
+<div id="chatbot" class="chatbot">
+    <div class="chatbot-header">
+        <span>Chat with us!</span>
+        <button id="close-chat" class="close-btn">X</button>
+    </div>
+    <div class="chatbot-body">
+        <div id="chat-box" class="chat-box">
+            <!-- Messages will be dynamically added here -->
+        </div>
+        <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+        <button id="send-btn" class="send-btn">Send</button>
+    </div>
+</div>
+
+<!-- Chatbot Trigger Button -->
+<div id="chatbot-btn" class="chatbot-btn">
+    <i class="fas fa-comment-dots"></i>
+</div>
+
+<script src="script.js"></script>
+
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            let sections = document.querySelectorAll('.section');
+            sections.forEach(function(section) {
+                section.classList.remove('active-section');
+            });
+            
+            // Show the selected section
+            let activeSection = document.getElementById(sectionId);
+            activeSection.classList.add('active-section');
+        }
+
+        // Open chatbot on click
+document.getElementById('chatbot-btn').addEventListener('click', function() {
+    document.getElementById('chatbot').style.display = 'flex';
+    document.getElementById('chatbot-btn').style.display = 'none';
+});
+
+// Close chatbot
+document.getElementById('close-chat').addEventListener('click', function() {
+    document.getElementById('chatbot').style.display = 'none';
+    document.getElementById('chatbot-btn').style.display = 'flex';
+});
+
+// Send message
+document.getElementById('send-btn').addEventListener('click', function() {
+    let message = document.getElementById('chat-input').value;
+    if (message.trim()) {
+        addMessage('You: ' + message);
+        document.getElementById('chat-input').value = '';
+        
+        // Simulate chatbot response
+        setTimeout(function() {
+            addMessage('Chatbot: I am here to help!');
+        }, 1000);
+    }
+});
+
+// Add message to chat box
+function addMessage(message) {
+    const chatBox = document.getElementById('chat-box');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = message;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the latest message
+}
+
+    </script>
+</body>
+</html>

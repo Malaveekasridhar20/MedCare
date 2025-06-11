@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            padding-top: 80px; /* Offset for fixed header */
+        }
+
+        /* Header styles */
+        .header {
+            background-color: #007bff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        .header .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            margin-left: 900px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        
+        /* Hero section styles */
+        .hero {
+            background-image: url('img/banner.png'); /* Change to your actual image path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #333; /* Fallback color if image fails to load */
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 20px;
+            text-align: left;
+            color: white; /* Text color for better visibility */
+        }
+
+        .hero h2 {
+            font-size: 16px;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero .discover-more {
+            padding: 10px 20px;
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero .discover-more:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Add a hover effect */
+        }
+
+        /* Options styles */
+        .options {
+            display: none; /* Hidden by default */
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #333; /* Text color for options */
+        }
+
+        .options ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .options li {
+            margin: 5px 0;
+            padding: 10px 0; /* Padding for better spacing */
+            border-bottom: 1px solid #ccc; /* Line/border at the bottom of each option */
+        }
+
+        .options li:last-child {
+            border-bottom: none; /* Remove bottom border from the last item */
+        }
+
+        .options li a {
+            text-decoration: none;
+            color: #007bff; /* Link color */
+            display: block; /* Make the entire area clickable */
+        }
+
+        .options li a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: left;
+            margin-top: 180px;
+        }
+
+        .welcome-section-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-right: 30px;
+        }
+
+        .welcome-section-content {
+            max-width: 500px;
+        }
+
+        .welcome-section-content h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .welcome-section-content h1 strong {
+            font-weight: bold;
+            color: #000;
+        }
+
+        .welcome-section-content p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .welcome-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 20px;
+        }
+
+        .welcome-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .welcome-list li::before {
+            content: "✔️";
+            color: #00c6ff;
+            margin-right: 10px;
+        }
+
+        .about-btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            height: 50px;
+        }
+
+        /* Appointment section */
+        .appointment-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            background-image: url('img/form_bg.jpg'); /* Add background image for the appointment section */
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            margin-top: 180px;
+        }
+
+        .appointment-section .appointment-form {
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: #333;
+            margin-left: 500px;
+        }
+
+        .appointment-section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .appointment-section input,
+        .appointment-section select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .appointment-section .appointment-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Department section with background image */
+        .departments-section {
+            padding: 40px 20px;
+            text-align: center;
+            background-image: url('img/department.jpg'); /* Background image for department section */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: black;
+            margin-top: 180px;
+            position: relative;
+        }
+
+        .departments-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.3); /* Overlay for readability */
+            z-index: 0;
+        }
+
+        .departments-section h2, 
+        .departments-section p, 
+        .departments-section .department-icon p, 
+        .departments-section .department-content h3, 
+        .departments-section .department-content p {
+            color: black; /* Ensure text is readable on background */
+            position: relative;
+            z-index: 1;
+        }
+
+        .departments-icons, .department-details {
+            position: relative;
+            z-index: 1;
+        }
+
+        .departments-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .department-icon {
+            background-color: #f0f8ff;
+            padding: 15px 20px;
+            border-radius: 8px ;
+            cursor: pointer;
+            text-align: center;
+            width: 120px;
+            transition: background-color 0.3s;
+            border-color: #007bff;
+        }
+
+        .department-icon:hover {
+            background-color: #d9ecff;
+        }
+
+        .department-icon.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .department-icon img {
+            width: 80px;
+            height: auto;
+        }
+
+        .department-icon p {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .department-details {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .department-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .department-content {
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .department-content h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .department-content p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .appointment-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        /* Improved Department Section Styling */
+        .departments-section {
+            padding: 50px 20px;
+            text-align: center;
+            background: linear-gradient(rgba(0, 123, 255, 0.6), rgba(0, 123, 255, 0.9)), url('img/department.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    
+        .departments-section h1{
+            margin-bottom: 30px;
+            color: black;
+            font-size: 50px
+        }
+        .departments-section p {
+            margin-bottom: 30px;
+            color: black;
+        }
+    
+        .departments-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+    
+    
+        /* Doctor List Styling */
+        #nearby-doctors {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            color: #333;
+            
+        }
+    
+        .doctor-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+    
+        .doctor-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1 1 45%;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+    
+        .doctor-item h4 {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 8px;
+        }
+    
+        .doctor-item p {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+    
+        .doctor-item .book-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+    
+        .doctor-item .book-btn:hover {
+            background-color: #0056b3;
+        }
+        /*quality*/
+        .quality-health-section {
+    text-align: center;
+    padding: 20px;
+    margin-top: 180px;
+}
+
+.quality-health-section h2 {
+    font-size: 50px;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.quality-health-section p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.service-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 50px;
+}
+
+.service-card {
+    background-color: #ffffff;
+    width: 250px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+}
+
+.icon img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.service-card h3 {
+    font-size: 1.2rem;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    font-size: 0.9rem;
+    color: #666;
+}
+.chatbot {
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+                display: flex;
+                align-items: center;
+                border: 1px solid white;
+                border-radius: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+    
+            .chatbot-popup {
+                display: none;
+                position: fixed;
+                bottom: 100px;
+                right: 20px;
+                width: 300px;
+                background-color: #fff;
+                color: #333;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                overflow: hidden;
+                z-index: 1001;
+            }
+            .chatbot-header {
+                background-color: #007bff;
+                color: #fff;
+                padding: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .chatbot-header h3 {
+                background-color: #007bff;
+                color: #fff;
+                padding: 2px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    
+            .chatbot-body {
+                padding: 10px;
+                max-height: 300px;
+                overflow-y: auto;
+            }
+    
+            .input-area {
+                display: flex;
+                padding: 10px;
+                border-top: 1px solid #ddd;
+            }
+    
+            .input-area input {
+                flex: 1;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+    
+            .input-area button {
+                padding: 8px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                cursor: pointer;
+                margin-left: 5px;
+                border-radius: 4px;
+            }
+    
+            .chat-history .user-message,
+            .chat-history .bot-message {
+                margin: 10px 0;
+                font-size: 14px;
+            }
+    
+            .chat-history .user-message {
+                text-align: right;
+                color: #007bff;
+            }
+    
+            .chat-history .bot-message {
+                text-align: left;
+                color: #333;
+            }
+            /* Improved Department Section Styling */
+        .departments-section {
+            padding: 50px 20px;
+            text-align: center;
+            background: linear-gradient(rgba(0, 123, 255, 0.6), rgba(0, 123, 255, 0.9)), url('img/department.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    
+        .departments-section h2, .departments-section p {
+            margin-bottom: 30px;
+            color: #fff;
+        }
+    
+        .departments-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+    
+        .department-icon {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 120px;
+            transition: 0.3s;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            color: #333;
+            cursor: pointer;
+        }
+    
+        .department-icon:hover{
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);
+        }
+    
+        /* Doctor List Styling */
+        #nearby-doctors {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            color: #333;
+        }
+    
+        .doctor-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+    
+        .doctor-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1 1 45%;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+    
+        .doctor-item h4 {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 8px;
+        }
+    
+        .doctor-item p {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+    
+        .doctor-item .book-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+    
+        .doctor-item .book-btn:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    color: #000;
+    text-align: center;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Reset and global styles */
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            background-color: #f4f4f9;
+        }
+        /* Footer Section */
+        .footer {
+            background-color: #1b2a49;
+            padding: 60px 20px;
+            color: #b0b4be;
+            margin-top: 180px;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .footer-logo {
+            flex: 1;
+        }
+
+        .footer-logo h1 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-logo h1 i {
+            margin-right: 10px;
+        }
+
+        .footer-logo p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo .social-icons {
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            color: #b0b4be;
+            font-size: 20px;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        .departments, .availability {
+            flex: 1;
+        }
+
+        .departments h3{
+            color: white;
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-left: 70px;
+        }
+        .availability h3 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .departments ul {
+            list-style: none;
+            padding: 0;
+            margin-left: 70px;
+        }
+        .availability ul {
+            list-style: none;
+            padding: 0;
+            margin-left: 20px;
+        }
+
+        .availability ul li  {
+            display: flex;
+            justify-content: space-between;
+            line-height: 1.8;
+        }
+        .departments ul li  {
+            display: flex;
+            justify-content: space-between;
+            line-height: 1.8;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Header section -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> MedCare
+        </div>
+        <nav class="nav-links">
+            <a href="pat_profile.html">Profile</a>
+            <a href="about.html">About</a>
+            <a href="blog.html">Blog</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <a href="#" class="chatbot" id="chatbot-toggle">
+            <i class="fas fa-comment-dots"></i> ChatBot
+        </a>
+
+        <div class="chatbot-popup" id="chatbot-popup">
+            <div class="chatbot-header">
+                <h3>Chat with Us</h3>
+                <button id="close-chatbot" style="background: none; border: none; color: white; font-size: 16px; cursor: pointer;">✖</button>
+            </div>
+            <div class="chatbot-body">
+                <div id="chatHistory" class="chat-history">
+                    <p class="bot-message">How can we help you today?</p>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="userMessage" placeholder="Type your message..." autocomplete="off" aria-label="User message input">
+                    <button id="sendMessage">Send</button>
+                </div>
+            </div>
+            </div>
+
+        </div>
+        
+    </header>
+
+    <!-- Hero section -->
+<section class="hero" id="home">
+    <h2>THE BEST MEDICAL CENTER</h2>
+    <h1>Bringing health <br> to life for the whole family.</h1>
+    <a href="#" class="discover-more" onclick="toggleOptions(event)">Discover More</a>
+    
+    <!-- Options Section -->
+    <div id="options" class="options">
+        <ul>
+            <li><a href="healthmetrics.html">View Health Metrics</a></li>
+            <li><a href="#book-appointment">Book Appointment</a></li>
+            <li><a href="#departments">Find Specialist</a></li> <!-- Update this link -->
+        </ul>
+    </div>
+</section>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="welcome-section-image">
+            <img src="img/1.jpg" alt="Doctor Image">
+        </div>
+        <div class="welcome-section-content">
+            <h1>Welcome To <strong>MedCare !!</strong></h1>
+            <p>Discover a smarter way to manage your health and connect with top specialists.
+                Join us on a journey to better well-being—your health, your way!</p>
+            <ul class="welcome-list">
+                <li>Providing quality care for our patients</li>
+                <li>Experienced and dedicated medical team</li>
+                <li>Safe,supportive and healing environment</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Book Appointment Section -->
+    <section class="appointment-section" id="book-appointment">
+        <div class="appointment-form">
+            <h2>Book an Appointment</h2>
+            <form>
+                <select required>
+                    <option value="">Please select doctor to visit</option>
+                    <option value="doctor1">Doctor 1</option>
+                    <option value="doctor2">Doctor 2</option>
+                </select>
+                <select required>
+                    <option value="">Meeting Preference</option>
+                    <option value="virtual">Virtual</option>
+                    <option value="in-person">In-Person</option>
+                </select>
+                <input type="text" placeholder="Your name" required>
+                <input type="number" placeholder="Your age" required>
+                <input type="text" placeholder="Phone number" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="date" placeholder="Appointment Date" required>
+                <input type="time" placeholder="Suitable time" required>
+                <button type="submit" class="appointment-button">Make An Appointment</button>
+            </form>
+        </div>
+    </section>
+    <!-- Success Modal -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Successfully Booked!</h2>
+        <p>Your appointment has been successfully booked. We will contact you soon.</p>
+    </div>
+</div>
+    <section class="departments-section" id="departments">
+        <h1>Find Specialist</h1>
+        <p>Discover the best specialists tailored to your health needs.<br>
+            Expert care is just a click away!</p>
+        
+            <div class="departments-icons" role="group" aria-label="Specialist Departments">
+                <div class="department-icon" onclick="displayNearby('Dentistry')" role="button" tabindex="0" aria-label="Find Dentistry Specialists">
+                    <img src="img/image.png" alt="Dentistry Icon">
+                    <p>Dentistry</p>
+                </div>
+                <div class="department-icon" onclick="displayNearby('Cardiology')" role="button" tabindex="0" aria-label="Find Cardiology Specialists">
+                    <img src="img/heart.png" alt="Cardiology Icon">
+                    <p>Cardiology</p>
+                </div>
+                <div class="department-icon" onclick="displayNearby('ENT Specialists')" role="button" tabindex="0" aria-label="Find ENT Specialists">
+                    <img src="img/deaf.png" alt="ENT Icon">
+                    <p>ENT Specialists</p>
+                </div>
+                <div class="department-icon" onclick="displayNearby('Pulmonologist')" role="button" tabindex="0" aria-label="Find Pulmonologist Specialists">
+                    <img src="img/lungs .png" alt="Lungs Icon">
+                    <p>Pulmonologist</p>
+                </div>
+                <div class="department-icon" onclick="askSpecialist()" role="button" tabindex="0" aria-label="Other Specialists">
+                    <img src="img/menu.png" alt="Menu Icon">
+                    <p>Other</p>
+                </div>
+            </div>
+            
+    
+        <!-- Container to display nearby specialists -->
+        <div id="nearby-doctors" style="display:none;">
+            <h3 id="department-title">Nearby Specialists</h3>
+            <div id="doctor-list" class="doctor-list"></div>
+        </div>
+    </section>
+    <section class="quality-health-section">
+        <h2>Quality Health</h2>
+        <p>Your health and wellness matter.<br>Here, you’ll find the expertise and support needed to achieve your best health</p>
+        
+        <div class="service-cards">
+            <div class="service-card">
+                <div class="icon">
+                    <img src="img\helpdesk.png" alt="Health Consultation Icon">
+                </div>
+                <h3>Health Consultation</h3>
+                <p>Experience the perfect blend of expertise and care — where your well-being comes first.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">
+                    <img src="img\patient.png" alt="Find Health Icon">
+                </div>
+                <h3>Find Health</h3>
+                <p>Empowering wellness through expertise and compassion — where every moment is dedicated to your health.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">
+                    <img src="img\doctor.png" alt="Search Doctor Icon">
+                </div>
+                <h3>Search Doctor</h3>
+                <p>Embrace a new standard in care — dedicated to your health, every step of the way.</p>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        function toggleOptions(event) {
+        event.preventDefault(); // Prevent default anchor behavior
+        const optionsDiv = document.getElementById('options');
+        
+        // Toggle the display of the options
+        if (optionsDiv.style.display === "none" || optionsDiv.style.display === "") {
+            optionsDiv.style.display = "block"; // Show options
+        } else {
+            optionsDiv.style.display = "none"; // Hide options
+        }
+    }
+        document.getElementById("chatbot-toggle").onclick = function(event) {
+    event.preventDefault(); // Prevent the default anchor behavior
+    const popup = document.getElementById("chatbot-popup");
+    popup.style.display = popup.style.display === "none" || popup.style.display === "" ? "block" : "none";
+};
+
+document.getElementById("close-chatbot").onclick = function() {
+    document.getElementById("chatbot-popup").style.display = "none";
+};
+
+        const doctors = {
+            "Dentistry": [
+                { name: "Dr. John Doe", address: "123 Dental St, City A", phone: "555-1234" },
+                { name: "Dr. Jane Smith", address: "456 Tooth Ave, City B", phone: "555-5678" }
+            ],
+            "Cardiology": [
+                { name: "Dr. Heart King", address: "789 Cardiac Rd, City A", phone: "555-8765" },
+                { name: "Dr. Artery Queen", address: "321 Vessel St, City C", phone: "555-4321" }
+            ],
+            "ENT Specialists": [
+                { name: "Dr. Sound Wave", address: "111 Hearing Rd, City A", phone: "555-7777" }
+            ],
+            "Neuroanatomy": [
+                { name: "Dr. Brain Surge", address: "222 Neuron St, City B", phone: "555-8888" }
+            ]
+        };
+    
+        function displayNearby(department) {
+            const doctorList = document.getElementById("doctor-list");
+            const departmentTitle = document.getElementById("department-title");
+            const nearbyDoctorsSection = document.getElementById("nearby-doctors");
+    
+            doctorList.innerHTML = "";
+            departmentTitle.innerText = `Nearby ${department} Specialists`;
+    
+            (doctors[department] || []).forEach(doctor => {
+                const doctorItem = document.createElement("div");
+                doctorItem.classList.add("doctor-item");
+                doctorItem.innerHTML = `
+                    <h4>${doctor.name}</h4>
+                    <p><strong>Address:</strong> ${doctor.address}</p>
+                    <p><strong>Phone:</strong> ${doctor.phone}</p>
+                    <button onclick="bookAppointment('${doctor.name}')" class="book-btn">Book Appointment</button>
+                `;
+                doctorList.appendChild(doctorItem);
+            });
+    
+            nearbyDoctorsSection.style.display = "block";
+        }
+    
+        function askSpecialist() {
+            const specialist = prompt("Please enter the type of specialist you're looking for:");
+            if (specialist) {
+                displayNearby(specialist);
+                const doctorList = document.getElementById("doctor-list");
+                if (doctorList.innerHTML === "") {
+                    doctorList.innerHTML = `<p>Sorry, no ${specialist} specialists found nearby.</p>`;
+                }
+            }
+        }
+    
+        function bookAppointment(doctorName) {
+            alert(`Booking an appointment with ${doctorName}`);
+            
+        }
+        
+        const userMessageInput = document.getElementById("userMessage");
+const sendMessageButton = document.getElementById("sendMessage");
+
+userMessageInput.addEventListener("input", () => {
+    sendMessageButton.disabled = !userMessageInput.value.trim(); // Enable button only if input has text
+});
+
+sendMessageButton.onclick = function() {
+    const userMessage = userMessageInput.value;
+    if (userMessage.trim() !== "") {
+        // Create user message element
+        const userMessageElement = document.createElement("p");
+        userMessageElement.className = "user-message";
+        userMessageElement.textContent = userMessage;
+
+        // Append to chat history
+        document.getElementById("chatHistory").appendChild(userMessageElement);
+
+        // Clear the input field
+        userMessageInput.value = "";
+        sendMessageButton.disabled = true; // Disable button after sending
+
+        // Simulate bot response
+        setTimeout(() => {
+            const botMessageElement = document.createElement("p");
+            botMessageElement.className = "bot-message";
+            botMessageElement.textContent = "Thanks for your message! We'll get back to you soon.";
+            document.getElementById("chatHistory").appendChild(botMessageElement);
+
+            // Scroll to the bottom of chat history
+            const chatHistory = document.getElementById("chatHistory");
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }, 1000);
+    }
+};
+
+    </script>
+</head>
+<body>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <h1><i class="fas fa-shield-alt"></i> MedCare</h1>
+                <p>Join us on a journey to better well-being—your health, your way!.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-dribbble"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="departments">
+                <h3>Find Specialist</h3>
+                <ul>
+                    <li>Births</li>
+                    <li>Cardiology</li>
+                    <li>Traumatology</li>
+                    <li>Nuclear</li>
+                    <li>Pregnancy</li>
+                    <li>X-ray</li>
+                    <li>Pulmonary</li>
+                    <li>Neurology</li>
+                    <li>Dental</li>
+                    <li>Magnetic</li>
+                    <li>For Disabled</li>
+                    <li>Prostheses</li>
+                    <li>Other</li>
+                </ul>
+            </div>
+            <div class="availability">
+                <h3>We’re Available</h3>
+                <ul>
+                    <li>Monday - Friday <span>8.00 - 18.00</span></li>
+                    <li>Saturday <span>8.00 - 18.00</span></li>
+                    <li>Sunday <span>8.00 - 13.00</span></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const appointmentForm = document.querySelector('.appointment-form');
+        const successModal = document.getElementById('successModal');
+        const closeModal = document.getElementById('closeModal');
+
+        appointmentForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent actual form submission for demo purposes
+
+            // Display the success modal
+            successModal.style.display = 'block';
+        });
+
+        // Close the modal when the close button is clicked
+        closeModal.addEventListener('click', () => {
+            successModal.style.display = 'none';
+        });
+
+        // Close the modal when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (event.target === successModal) {
+                successModal.style.display = 'none';
+            }
+        });
+    });
+</script>
