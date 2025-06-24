@@ -1,4 +1,4 @@
-🏥 MedCare
+
 MedCare is a smart healthcare assistant designed to streamline patient care, appointment scheduling, medical records management, and doctor-patient communication in one powerful platform. Built for hospitals, clinics, and health startups, MedCare ensures faster service delivery, better patient engagement, and secure data management.
 
 🚀 Features
